@@ -10,19 +10,30 @@ import javax.swing.JComponent;
  */
 public class PanelSimulacaoFilosofos implements PanelSimulacao {
 
+    /** Simulação dos filósofos */
+    private final SimulacaoFilosofos simulacao;
+    
+    /**
+     * Cria novo painel de simulação
+     */
+    public PanelSimulacaoFilosofos() {
+        simulacao = new SimulacaoFilosofos();
+    }
+    
     @Override
     public JComponent getPainelPrincipal() {
+        simulacao.executa();
         return new JComponent() {};
     }
 
     @Override
     public JComponent getPainelPropriedades() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new JComponent() {};
     }
 
     @Override
     public JComponent getPainelEstatisticas() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new JComponent() {};
     }
     
 }
