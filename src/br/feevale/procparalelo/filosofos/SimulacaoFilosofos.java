@@ -28,14 +28,16 @@ public class SimulacaoFilosofos extends AbstractSimulacao {
         getLog().grava("Inicializando simulação...");
         filosofos = new LinkedList<>();
         for (int i = 0; i < NUMERO_FILOSOFOS_PADRAO; i++) {
-            Filosofo filosofo = new Filosofo();
+            Filosofo filosofo = new FilosofoTeste();
             filosofos.add(filosofo);
         }
     }
 
     @Override
     public void iniciaSimulacao() {
-        
+        filosofos.stream().forEach((filosofo) -> {
+            filosofo.inicia();
+        });
     }
     
     
