@@ -13,7 +13,7 @@ public class Log {
      * @param mensagem
      * @param substituicoes 
      */
-    public void grava(String mensagem, Object... substituicoes) {
+    public synchronized void grava(String mensagem, Object... substituicoes) {
         System.out.println(String.format(mensagem, substituicoes));
     }
     

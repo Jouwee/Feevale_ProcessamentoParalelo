@@ -15,6 +15,8 @@ public class SimulacaoFilosofos extends AbstractSimulacao {
     public static final int NUMERO_FILOSOFOS_PADRAO = 5;
     /** Lista de filósofos */   
     private List<Filosofo> filosofos;
+    /** Lista de garfos */   
+    private List<Garfo> garfos;
 
     /**
      * Cria a simulação dos filósofos
@@ -28,8 +30,13 @@ public class SimulacaoFilosofos extends AbstractSimulacao {
         getLog().grava("Inicializando simulação...");
         filosofos = new LinkedList<>();
         for (int i = 0; i < NUMERO_FILOSOFOS_PADRAO; i++) {
-            Filosofo filosofo = new FilosofoTeste();
+            Filosofo filosofo = new FilosofoTeste(this);
+            filosofo.setIndice(i);
             filosofos.add(filosofo);
+        }
+        garfos = new LinkedList<>();
+        for (int i = 0; i < NUMERO_FILOSOFOS_PADRAO; i++) {
+            garfos.add(new Garfo());
         }
     }
 
@@ -40,6 +47,17 @@ public class SimulacaoFilosofos extends AbstractSimulacao {
         });
     }
     
-    
+    /**
+     * Retorna um garfo
+     * 
+     * @param indice
+     * @return Garfo
+     */
+    public Garfo getGarfo(int indice) {
+        if (indice == -1) {
+            return garfos.get(garfos.size() - 1);
+        }
+        return garfos.get(indice);
+    }
     
 }
