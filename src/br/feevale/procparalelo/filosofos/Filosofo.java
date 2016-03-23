@@ -13,6 +13,10 @@ public abstract class Filosofo {
     private int indice;
     /** Controle de starvation */
     private double starvation;
+    /** Thread do agente */
+    private Thread threadAgente;
+    /** Thread de redução do starvation */
+    private Thread threadReducaoStarvation;
 
     /**
      * Cria um novo filósofo
@@ -28,7 +32,7 @@ public abstract class Filosofo {
      */
     public void inicia() {
         starvation = 100;
-        Thread threadAgente = new Thread(() -> {
+        threadAgente = new Thread(() -> {
             try {
                 while(true) {
                     try {
@@ -42,7 +46,7 @@ public abstract class Filosofo {
         });
         threadAgente.setDaemon(true);
         threadAgente.start();
-        Thread threadReducaoStarvation = new Thread(() -> {
+        threadReducaoStarvation = new Thread(() -> {
             try {
                 while(true) {
                     Thread.sleep(500);
@@ -158,7 +162,7 @@ public abstract class Filosofo {
      * @throws InterruptedException
      */
     public void comer(int segundos) throws InterruptedException {
-        starvation += segundos;
+        addStarvation(segundos);
         log("Comi (Starvation %1$f)", starvation);
         espera(segundos);
     }
@@ -189,6 +193,53 @@ public abstract class Filosofo {
      */
     public void setIndice(int indice) {
         this.indice = indice;
+    }
+
+    /**
+     * Adiciona ao starvation
+     * 
+     * @param value 
+     */
+    public void addStarvation(double value) {
+        starvation += value;
+        if (starvation > 100) {
+            starvation = 100;
+        }
+    }
+    
+    /**
+     * Retorna o Starvation
+     * 
+     * @return double
+     */
+    public double getStarvation() {
+        return starvation;
+    }
+    
+    /**
+     * Interrompe as threads
+     */
+    public void interrupt() {
+        threadAgente.interrupt();
+        threadReducaoStarvation.interrupt();
+    }
+
+    /**
+     * Retorna a thread agente
+     * 
+     * @return Thread
+     */
+    public Thread getThreadAgente() {
+        return threadAgente;
+    }
+
+    /**
+     * Retorna a thread de redução do starvation
+     * 
+     * @return Thread
+     */
+    public Thread getThreadReducaoStarvation() {
+        return threadReducaoStarvation;
     }
     
 }

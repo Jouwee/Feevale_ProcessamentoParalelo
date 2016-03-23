@@ -36,6 +36,18 @@ public abstract class AbstractSimulacao {
     public abstract void iniciaSimulacao();
     
     /**
+     * Encerra a simulação
+     */
+    public abstract void encerra();
+
+    /**
+     * Retorna se a simulação está rodando
+     * 
+     * @return boolean
+     */
+    public abstract boolean isRunning();
+    
+    /**
      * Retorna o log dessa simulação
      * 
      * @return Log

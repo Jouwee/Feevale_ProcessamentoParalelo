@@ -14,27 +14,32 @@ public class SimulacaoFilosofos extends AbstractSimulacao {
     /** Número padrão de filósofos */
     public static final int NUMERO_FILOSOFOS_PADRAO = 5;
     /** Lista de filósofos */   
-    private List<Filosofo> filosofos;
+    private final List<Filosofo> filosofos;
     /** Lista de garfos */   
-    private List<Garfo> garfos;
+    private final List<Garfo> garfos;
+    /** Indica se está executando */
+    private boolean running;
 
     /**
      * Cria a simulação dos filósofos
      */
     public SimulacaoFilosofos() {
         super();
+        running = false;
+        filosofos = new LinkedList<>();
+        garfos = new LinkedList<>();
     }
     
     @Override
     public void inicializa() {
         getLog().grava("Inicializando simulação...");
-        filosofos = new LinkedList<>();
+        filosofos.clear();
         for (int i = 0; i < NUMERO_FILOSOFOS_PADRAO; i++) {
             Filosofo filosofo = new FilosofoTeste(this);
             filosofo.setIndice(i);
             filosofos.add(filosofo);
         }
-        garfos = new LinkedList<>();
+        garfos.clear();
         for (int i = 0; i < NUMERO_FILOSOFOS_PADRAO; i++) {
             garfos.add(new Garfo());
         }
@@ -42,6 +47,7 @@ public class SimulacaoFilosofos extends AbstractSimulacao {
 
     @Override
     public void iniciaSimulacao() {
+        running = true;
         filosofos.stream().forEach((filosofo) -> {
             filosofo.inicia();
         });
@@ -58,6 +64,37 @@ public class SimulacaoFilosofos extends AbstractSimulacao {
             return garfos.get(garfos.size() - 1);
         }
         return garfos.get(indice);
+    }
+
+    /**
+     * Retorna a lista de filósofos
+     * 
+     * @return {@code List<Filosofo>}
+     */
+    public List<Filosofo> getFilosofos() {
+        return new LinkedList<>(filosofos);
+    }
+
+    /**
+     * Retorna a lista de garfos
+     * 
+     * @return {@code List<Garfo>}
+     */
+    public List<Garfo> getGarfos() {
+        return garfos;
+    }
+
+    @Override
+    public void encerra() {
+        running = false;
+        for (Filosofo filosofo : filosofos) {
+            filosofo.interrupt();
+        }
+    }
+
+    @Override
+    public boolean isRunning() {
+        return running;
     }
     
 }

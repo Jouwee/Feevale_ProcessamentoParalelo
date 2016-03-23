@@ -6,9 +6,22 @@ import javax.swing.JComponent;
  * Panel genérico de simulação
  * 
  * @author  Cristian Dias, Gustavo Cassel e Nícolas Pohren
+ * @param <T>
  */
-public interface PanelSimulacao {
- 
+public abstract class PanelSimulacao<T extends AbstractSimulacao> {
+
+    /** Simulação dos filósofos */
+    private final T simulacao;
+
+    /**
+     * Cria o panel de simulação
+     * 
+     * @param simulacao 
+     */
+    public PanelSimulacao(T simulacao) {
+        this.simulacao = simulacao;
+    }
+    
     /**
      * Retorna o painel principal
      * 
@@ -29,5 +42,14 @@ public interface PanelSimulacao {
      * @return JComponent
      */
     public abstract JComponent getPainelEstatisticas();
+
+    /**
+     * Retorna a simulação
+     * 
+     * @return T
+     */
+    public T getSimulacao() {
+        return simulacao;
+    }
     
 }
