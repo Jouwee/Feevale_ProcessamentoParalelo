@@ -26,7 +26,7 @@ public class FilosofoTeste extends Filosofo {
             } catch (GarfoEmUsoException e) {}
             largaGarfoDireito();
         }
-        espera(1);
+        espera(0.1);
     }
     
 }

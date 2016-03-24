@@ -1,5 +1,8 @@
 package br.feevale.procparalelo.filosofos;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Agente do filósofo
  * 
@@ -13,6 +16,10 @@ public abstract class Filosofo {
     private int indice;
     /** Controle de starvation */
     private double starvation;
+    /** Indica se o filosofo esta comendo */
+    private boolean comendo;
+    /** Indica se o filósofo está vivo */
+    private boolean vivo;
     /** Thread do agente */
     private Thread threadAgente;
     /** Thread de redução do starvation */
@@ -32,9 +39,13 @@ public abstract class Filosofo {
      */
     public void inicia() {
         starvation = 100;
+        vivo = true;
         threadAgente = new Thread(() -> {
             try {
                 while(true) {
+                    if (!vivo) {
+                        return;
+                    }
                     try {
                         loop();
                     } catch (GarfoEmUsoException | IllegalArgumentException ex) {
@@ -49,8 +60,15 @@ public abstract class Filosofo {
         threadReducaoStarvation = new Thread(() -> {
             try {
                 while(true) {
-                    Thread.sleep(500);
-                    starvation -= 0.1;
+                    if (!vivo) {
+                        return;
+                    }
+                    Thread.sleep(100);
+                    if (comendo) {
+                        addStarvation(simulacao.getRestauracaoStarvation());
+                    } else {
+                        addStarvation(-simulacao.getTaxaReducaoStarvation());
+                    }
                 }
             } catch(InterruptedException e) { }
         });
@@ -72,9 +90,9 @@ public abstract class Filosofo {
      * @param segundos 
      * @throws java.lang.InterruptedException 
      */
-    public void espera(int segundos) throws InterruptedException {
+    public void espera(double segundos) throws InterruptedException {
         log("Aguardando %1$s segundos", segundos);
-        Thread.sleep(segundos * 1000);
+        Thread.sleep((long) (segundos * 1000));
     }
     
     /**
@@ -161,10 +179,12 @@ public abstract class Filosofo {
      * @param segundos 
      * @throws InterruptedException
      */
-    public void comer(int segundos) throws InterruptedException {
-        addStarvation(segundos);
-        log("Comi (Starvation %1$f)", starvation);
+    public void comer(double segundos) throws InterruptedException {
+        log("Comendo por %2$f segundos (Starvation %1$f)", starvation, segundos);
+        comendo = true;
         espera(segundos);
+        comendo = false;
+        log("Terminei de comer (Starvation %1$f)", starvation);
     }
     
     /**
@@ -200,10 +220,15 @@ public abstract class Filosofo {
      * 
      * @param value 
      */
-    public void addStarvation(double value) {
+    public synchronized void addStarvation(double value) {
         starvation += value;
         if (starvation > 100) {
             starvation = 100;
+        }
+        if (starvation < 0) {
+            vivo = false;
+            interrupt();
+            log("Eu morri de fome x(");
         }
     }
     
@@ -241,5 +266,14 @@ public abstract class Filosofo {
     public Thread getThreadReducaoStarvation() {
         return threadReducaoStarvation;
     }
-    
+
+    /**
+     * Retorna se o filósofo está vivo
+     * 
+     * @return boolean
+     */
+    public boolean isVivo() {
+        return vivo;
+    }
+
 }

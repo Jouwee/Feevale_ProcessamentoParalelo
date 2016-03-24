@@ -31,6 +31,8 @@ public class Aplicacao extends JFrame {
     private JButton botaoIniciar;
     /** Botão de parar */
     private JButton botaoParar;
+    /** Panel do log */
+    private PanelLog panelLog;
     
     /**
      * Método principal da aplicação
@@ -63,6 +65,7 @@ public class Aplicacao extends JFrame {
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(buildAbas());
         getContentPane().add(buildPropriedades(), BorderLayout.EAST);
+        getContentPane().add(buildPanelInferior(), BorderLayout.SOUTH);
     }
     
     /**
@@ -98,6 +101,23 @@ public class Aplicacao extends JFrame {
         panel.add(buildPropriedadesEspecificas());
         panel.add(buildPanelControle(), BorderLayout.SOUTH);
         return panel;
+    }
+    
+    /**
+     * Cria o panel inferior
+     */
+    private JComponent buildPanelInferior() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(buildPanelLog());
+        return panel;
+    }
+    
+    /**
+     * Cria o panel de log
+     */
+    private JComponent buildPanelLog() {
+        panelLog = new PanelLog();
+        return panelLog;
     }
     
     /**
@@ -152,7 +172,7 @@ public class Aplicacao extends JFrame {
      */
     private void iniciarSimulacao() {
         getPanelSimulacaco().getSimulacao().executa();
-        updateButtons();
+        updatePanelPropriedades();
     }
     
     /**
@@ -160,7 +180,7 @@ public class Aplicacao extends JFrame {
      */
     private void pararSimulacao() {
         getPanelSimulacaco().getSimulacao().encerra();
-        updateButtons();
+        updatePanelPropriedades();
     }
     
     /**
@@ -180,16 +200,18 @@ public class Aplicacao extends JFrame {
     public void onAbaChanged() {
         PanelSimulacao pSimulacao = getPanelSimulacaco();
         panelPropriedadesEspecificas.add(pSimulacao.getPainelPropriedades());
-        updateButtons();
+        panelLog.setLog(pSimulacao.getSimulacao().getLog());
+        updatePanelPropriedades();
     }
     
     /**
      * Atualiza os botões
      */
-    public void updateButtons() {
+    private void updatePanelPropriedades() {
         AbstractSimulacao simulacao = getPanelSimulacaco().getSimulacao();
         botaoIniciar.setEnabled(!simulacao.isRunning());
         botaoParar.setEnabled(simulacao.isRunning());
+        getPanelSimulacaco().getPainelPropriedades().setEnabled(!simulacao.isRunning());
     }
     
     /**
