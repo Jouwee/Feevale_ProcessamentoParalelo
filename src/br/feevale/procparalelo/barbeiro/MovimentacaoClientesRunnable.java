@@ -14,6 +14,18 @@ import java.util.logging.Logger;
  */
 public class MovimentacaoClientesRunnable implements Runnable {
 
+    /** Simulação */
+    private final SimulacaoBarbeiro simulacao;
+
+    /**
+     * Cria a thread 
+     * 
+     * @param simulacao 
+     */
+    public MovimentacaoClientesRunnable(SimulacaoBarbeiro simulacao) {
+        this.simulacao = simulacao;
+    }
+    
     @Override
     public void run() {
         while (true) {
@@ -22,8 +34,7 @@ public class MovimentacaoClientesRunnable implements Runnable {
             } catch (InterruptedException ex) {
                 Logger.getLogger(MovimentacaoClientesRunnable.class.getName()).log(Level.SEVERE, null, ex);
             }
-            Barbearia.getInstance().addNovoCliente();
-
+            simulacao.addNovoCliente();
         }
     }
 

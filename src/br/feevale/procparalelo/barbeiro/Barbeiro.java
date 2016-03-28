@@ -13,9 +13,19 @@ import java.util.logging.Logger;
  */
 public class Barbeiro implements Runnable {
 
+    /** Referência a simulação */
+    private final SimulacaoBarbeiro simulacao;
     /* Barbeiro está dormindo */
     private boolean dormindo = true;
 
+    /**
+     * 
+     * @param simulacao 
+     */
+    public Barbeiro(SimulacaoBarbeiro simulacao) {
+        this.simulacao = simulacao;
+    }
+    
     /**
      * Acorda o barbeiro se ele estiver dormindo
      */
@@ -30,7 +40,7 @@ public class Barbeiro implements Runnable {
 
     @Override
     public void run() {
-        FilaClientes fila = Barbearia.getInstance().getFilaClientes();
+        FilaClientes fila = simulacao.getFilaClientes();
         while (fila.possuiClienteFila()) {
             Cliente c = fila.getPrimeiroClienteFila();
             System.out.println("Cliente " + c.toString() + " começou a cortar o cabelo");

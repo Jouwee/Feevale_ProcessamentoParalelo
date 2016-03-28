@@ -5,7 +5,7 @@ import javax.swing.JComponent;
 /**
  * Panel genérico de simulação
  * 
- * @author  Cristian Dias, Gustavo Cassel e Nícolas Pohren
+ * @author Cristian Dias, Gustavo Cassel e Nícolas Pohren
  * @param <T>
  */
 public abstract class PanelSimulacao<T extends AbstractSimulacao> {

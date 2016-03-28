@@ -1,5 +1,6 @@
 package br.feevale.procparalelo;
 
+import br.feevale.procparalelo.barbeiro.PanelSimulacaoBarbeiro;
 import br.feevale.procparalelo.filosofos.PanelSimulacaoFilosofos;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -13,6 +14,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  * Classe principal da aplicação
@@ -85,7 +88,11 @@ public class Aplicacao extends JFrame {
     private JComponent buildAbas() {
         abas = new JTabbedPane();
         addAba("Problema dos filósofos", new PanelSimulacaoFilosofos());
+        addAba("Problema do barbeiro", new PanelSimulacaoBarbeiro());
         abas.setFont(new Font("Calibri", Font.BOLD, 14));
+        abas.addChangeListener((ChangeEvent e) -> {
+            onAbaChanged();
+        });
         return abas;
     }
     

@@ -1,5 +1,6 @@
 package br.feevale.procparalelo.filosofos;
 
+import br.feevale.procparalelo.AutoUpdatePanel;
 import br.feevale.procparalelo.PanelSimulacao;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -27,8 +28,6 @@ import javax.swing.JTextField;
  */
 public class PanelSimulacaoFilosofos extends PanelSimulacao<SimulacaoFilosofos> {
 
-    /** Taxa de atualização da simulação */
-    private static final int FRAMES_PER_SECOND = 30;
     /** Panel de parâmetros */
     private PanelParametros parametros;
     
@@ -60,7 +59,7 @@ public class PanelSimulacaoFilosofos extends PanelSimulacao<SimulacaoFilosofos> 
     /**
      * Painél de visualização da simulação
      */
-    private class PanelVisualizacao extends JComponent {
+    private class PanelVisualizacao extends AutoUpdatePanel {
 
         /** Cores a utilizar pelos filósofos */
         private final Color[] filosofoColors = {
@@ -68,22 +67,6 @@ public class PanelSimulacaoFilosofos extends PanelSimulacao<SimulacaoFilosofos> 
             Color.blue,
             Color.green,
         };
-        
-        /**
-         * Cria o painel
-         */
-        public PanelVisualizacao() {
-            Thread updateThread = new Thread(() -> {
-                try {
-                    while(true) {
-                        Thread.sleep(1000 / FRAMES_PER_SECOND);
-                        repaint();
-                    }
-                } catch (Exception e) { }
-            });
-            updateThread.setDaemon(true);
-            updateThread.start();
-        }
         
         @Override
         protected void paintComponent(Graphics g) {

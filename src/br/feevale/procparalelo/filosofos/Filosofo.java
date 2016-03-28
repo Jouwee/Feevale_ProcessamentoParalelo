@@ -1,8 +1,5 @@
 package br.feevale.procparalelo.filosofos;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  * Agente do filósofo
  * 
