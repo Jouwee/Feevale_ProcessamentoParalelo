@@ -17,6 +17,10 @@ public class SimulacaoBarbeiro extends AbstractSimulacao {
     private final Barbeiro barbeiro;
     /** Tamanho da sala de espera */
     private int tamanhoSalaEspera;
+    /* Índice para calcular o tempo entre a chegada de cada cliente */
+    private long indiceNovosCliente = 20;
+    /* Tempo (em milisegundos) que o barbeiro leva para cortar o cabelo */
+    private long tempoEsperaAtendimento = 2000;
     /** Controle de se a simulação está sendo executada */
     private boolean running;
 
@@ -27,11 +31,11 @@ public class SimulacaoBarbeiro extends AbstractSimulacao {
     public SimulacaoBarbeiro() {
         this.barbeiro = new Barbeiro(this);
         this.filaClientes = new FilaClientes();
+        tamanhoSalaEspera = DEFAULT_TAMANHO_SALA_ESPERA;
     }
     
     @Override
     public void inicializa() {
-        tamanhoSalaEspera = DEFAULT_TAMANHO_SALA_ESPERA;
     }
 
     @Override
@@ -56,10 +60,10 @@ public class SimulacaoBarbeiro extends AbstractSimulacao {
     public synchronized void addNovoCliente() {
         Cliente c = new Cliente();
         if (filaClientes.size() == tamanhoSalaEspera) {
-            System.out.println("Cliente " + c.toString() + " está indo embora pois a barbearia está cheia");
+            getLog().grava("Cliente " + c.toString() + " está indo embora pois a barbearia está cheia");
             return;
         }
-        System.out.println("Cliente " + c.toString() + " chegou à barbearia");
+        getLog().grava("Cliente " + c.toString() + " chegou à barbearia");
         filaClientes.add(c);
         barbeiro.acordaSeNecessario();
     }
@@ -99,5 +103,44 @@ public class SimulacaoBarbeiro extends AbstractSimulacao {
     public void setTamanhoSalaEspera(int tamanhoSalaEspera) {
         this.tamanhoSalaEspera = tamanhoSalaEspera;
     }
+
+    /**
+     * Retorna índice para calcular o tempo entre a chegada de cada cliente
+     *
+     * @return índice para calcular o tempo entre a chegada de cada cliente
+     */
+    public long getIndiceNovosCliente() {
+        return indiceNovosCliente;
+    }
+
+    /**
+     * Indica indice para calcular o tempo entre a chegada de cada cliente
+     *
+     * @param indiceNovosCliente índice para calcular o tempo entre a chegada de
+     * cada cliente
+     */
+    public void setIndiceNovosCliente(long indiceNovosCliente) {
+        this.indiceNovosCliente = indiceNovosCliente;
+    }
+
+    /**
+     * Retorna tempo (em milisegundos) que o barbeiro leva para cortar o cabelo
+     *
+     * @return Tempo (em milisegundos) que o barbeiro leva para cortar o cabelo
+     */
+    public long getTempoEsperaAtendimento() {
+        return tempoEsperaAtendimento;
+    }
+
+    /**
+     * Indica tempo (em milisegundos) que o barbeiro leva para cortar o cabelo
+     *
+     * @param tempoEsperaAtendimento Tempo (em milisegundos) que o barbeiro leva
+     * para cortar o cabelo
+     */
+    public <T> void setTempoEsperaAtendimento(long tempoEsperaAtendimento) {
+        this.tempoEsperaAtendimento = tempoEsperaAtendimento;
+    }
+
 
 }

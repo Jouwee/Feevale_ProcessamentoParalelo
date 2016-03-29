@@ -34,8 +34,17 @@ public class Barbeiro implements Runnable {
             return;
         }
         dormindo = false;
-        System.out.println("Barbeiro foi acordado");
+        simulacao.getLog().grava("Barbeiro foi acordado");
         new Thread(this).start();
+    }
+
+    /**
+     * Retorna se o barbeiro está dormindo
+     * 
+     * @return boolean
+     */
+    public boolean isDormindo() {
+        return dormindo;
     }
 
     @Override
@@ -43,17 +52,17 @@ public class Barbeiro implements Runnable {
         FilaClientes fila = simulacao.getFilaClientes();
         while (fila.possuiClienteFila()) {
             Cliente c = fila.getPrimeiroClienteFila();
-            System.out.println("Cliente " + c.toString() + " começou a cortar o cabelo");
+            simulacao.getLog().grava("Cliente " + c.toString() + " começou a cortar o cabelo");
             try {
-                Thread.sleep(Configuracoes.getTempoEsperaAtendimento());
+                Thread.sleep(simulacao.getTempoEsperaAtendimento());
             } catch (InterruptedException ex) {
                 Logger.getLogger(Barbeiro.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.out.println("Cliente " + c.toString() + " acabou o corte de cabelo");
+            simulacao.getLog().grava("Cliente " + c.toString() + " acabou o corte de cabelo");
             fila.removeClienteFila(c);
         }
         dormindo = true;
-        System.out.println("Barbeiro começou a dormir pois não há mais clientes na barbearia");
+        simulacao.getLog().grava("Barbeiro começou a dormir pois não há mais clientes na barbearia");
     }
 
 }

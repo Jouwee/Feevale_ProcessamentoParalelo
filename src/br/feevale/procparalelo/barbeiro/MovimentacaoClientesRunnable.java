@@ -30,7 +30,7 @@ public class MovimentacaoClientesRunnable implements Runnable {
     public void run() {
         while (true) {
             try {
-                Thread.sleep((long) (Math.random() * 100 * Configuracoes.getIndiceNovosCliente()));
+                Thread.sleep((long) (Math.random() * 100 * simulacao.getIndiceNovosCliente()));
             } catch (InterruptedException ex) {
                 Logger.getLogger(MovimentacaoClientesRunnable.class.getName()).log(Level.SEVERE, null, ex);
             }

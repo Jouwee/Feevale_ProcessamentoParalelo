@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 /**
  * Classe principal da aplicação
@@ -206,9 +205,12 @@ public class Aplicacao extends JFrame {
      */
     public void onAbaChanged() {
         PanelSimulacao pSimulacao = getPanelSimulacaco();
+        panelPropriedadesEspecificas.removeAll();
         panelPropriedadesEspecificas.add(pSimulacao.getPainelPropriedades());
         panelLog.setLog(pSimulacao.getSimulacao().getLog());
         updatePanelPropriedades();
+        revalidate();
+        repaint();
     }
     
     /**
