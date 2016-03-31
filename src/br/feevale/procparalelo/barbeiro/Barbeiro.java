@@ -5,16 +5,15 @@
  */
 package br.feevale.procparalelo.barbeiro;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  * Classe representando barbeiro
  */
-public class Barbeiro implements Runnable {
+public class Barbeiro extends Thread {
 
     /** Referência a simulação */
     private final SimulacaoBarbeiro simulacao;
+    /** Objeto de lock */
+    private final Object lock;
     /* Barbeiro está dormindo */
     private boolean dormindo = true;
 
@@ -24,6 +23,7 @@ public class Barbeiro implements Runnable {
      */
     public Barbeiro(SimulacaoBarbeiro simulacao) {
         this.simulacao = simulacao;
+        lock = new Object();
     }
     
     /**
@@ -35,7 +35,9 @@ public class Barbeiro implements Runnable {
         }
         dormindo = false;
         simulacao.getLog().grava("Barbeiro foi acordado");
-        new Thread(this).start();
+        synchronized(lock) {
+            lock.notify();
+        }
     }
 
     /**
@@ -49,20 +51,24 @@ public class Barbeiro implements Runnable {
 
     @Override
     public void run() {
-        FilaClientes fila = simulacao.getFilaClientes();
-        while (fila.possuiClienteFila()) {
-            Cliente c = fila.getPrimeiroClienteFila();
-            simulacao.getLog().grava("Cliente " + c.toString() + " começou a cortar o cabelo");
-            try {
-                Thread.sleep(simulacao.getTempoEsperaAtendimento());
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Barbeiro.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            FilaClientes fila = simulacao.getFilaClientes();
+            while (true) {
+                while (fila.possuiClienteFila()) {
+                    Cliente c = fila.getPrimeiroClienteFila();
+                    simulacao.getLog().grava("Cliente " + c.toString() + " começou a cortar o cabelo");
+                    fila.removeClienteFila(c);
+                    Thread.sleep(simulacao.getTempoEsperaAtendimento());
+                    simulacao.getLog().grava("Cliente " + c.toString() + " acabou o corte de cabelo");
+                }
+                dormindo = true;
+                simulacao.getLog().grava("Barbeiro começou a dormir pois não há clientes na barbearia");
+                synchronized(lock) {
+                    lock.wait();
+                }
             }
-            simulacao.getLog().grava("Cliente " + c.toString() + " acabou o corte de cabelo");
-            fila.removeClienteFila(c);
+        } catch (InterruptedException ex) {
         }
-        dormindo = true;
-        simulacao.getLog().grava("Barbeiro começou a dormir pois não há mais clientes na barbearia");
     }
 
 }

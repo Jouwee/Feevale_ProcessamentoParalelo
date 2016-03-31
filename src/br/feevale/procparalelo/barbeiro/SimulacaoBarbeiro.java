@@ -14,7 +14,7 @@ public class SimulacaoBarbeiro extends AbstractSimulacao {
     /* Fila de clientes na barbearia */
     private final FilaClientes filaClientes;
     /* Barbeiro que atende na barbearia */
-    private final Barbeiro barbeiro;
+    private Barbeiro barbeiro;
     /** Tamanho da sala de espera */
     private int tamanhoSalaEspera;
     /* Índice para calcular o tempo entre a chegada de cada cliente */
@@ -23,29 +23,35 @@ public class SimulacaoBarbeiro extends AbstractSimulacao {
     private long tempoEsperaAtendimento = 2000;
     /** Controle de se a simulação está sendo executada */
     private boolean running;
+    /** Movimentação de clientes da barbearia */
+    private Thread movimentacaoClientes;
 
 
     /**
      * Cria uma nova simulação do barbeiro
      */
     public SimulacaoBarbeiro() {
-        this.barbeiro = new Barbeiro(this);
         this.filaClientes = new FilaClientes();
         tamanhoSalaEspera = DEFAULT_TAMANHO_SALA_ESPERA;
     }
     
     @Override
     public void inicializa() {
+        movimentacaoClientes = new Thread(new MovimentacaoClientesRunnable(this));
+        barbeiro = new Barbeiro(this);
     }
 
     @Override
     public void iniciaSimulacao() {
         running = true;
-        new Thread(new MovimentacaoClientesRunnable(this)).start();
+        movimentacaoClientes.start();
+        barbeiro.start();
     }
 
     @Override
     public void encerra() {
+        movimentacaoClientes.interrupt();
+        barbeiro.interrupt();
         running = false;
     }
 
