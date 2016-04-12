@@ -12,7 +12,7 @@ public class SimulacaoBarbeiro extends AbstractSimulacao {
     /** Tamanho da sala de espera padrão */
     private final static int DEFAULT_TAMANHO_SALA_ESPERA = 5;
     /* Fila de clientes na barbearia */
-    private final FilaClientes filaClientes;
+    private FilaClientes filaClientes;
     /* Barbeiro que atende na barbearia */
     private Barbeiro barbeiro;
     /** Tamanho da sala de espera */
@@ -31,7 +31,6 @@ public class SimulacaoBarbeiro extends AbstractSimulacao {
      * Cria uma nova simulação do barbeiro
      */
     public SimulacaoBarbeiro() {
-        this.filaClientes = new FilaClientes();
         tamanhoSalaEspera = DEFAULT_TAMANHO_SALA_ESPERA;
     }
     
@@ -39,6 +38,7 @@ public class SimulacaoBarbeiro extends AbstractSimulacao {
     public void inicializa() {
         movimentacaoClientes = new Thread(new MovimentacaoClientesRunnable(this));
         barbeiro = new Barbeiro(this);
+        filaClientes = new FilaClientes();
     }
 
     @Override
