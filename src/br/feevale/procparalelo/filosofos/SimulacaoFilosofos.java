@@ -48,7 +48,7 @@ public class SimulacaoFilosofos extends AbstractSimulacao {
         getLog().grava("Inicializando simulação...");
         filosofos.clear();
         for (int i = 0; i < quantidadeFilosofos; i++) {
-            Filosofo filosofo = new FilosofoTeste(this);
+            Filosofo filosofo = new Filosofo(this);
             filosofo.setIndice(i);
             filosofos.add(filosofo);
         }

@@ -5,7 +5,7 @@ package br.feevale.procparalelo.filosofos;
  * 
  * @author Cristian Dias, Gustavo Cassel e Nícolas Pohren
  */
-public abstract class Filosofo {
+public class Filosofo {
     
     /** Simulação que a o filósofo pertence */
     private final SimulacaoFilosofos simulacao;
@@ -79,7 +79,22 @@ public abstract class Filosofo {
      * @throws InterruptedException
      * @throws br.feevale.procparalelo.filosofos.GarfoEmUsoException
      */
-    public abstract void loop() throws InterruptedException, GarfoEmUsoException;
+    public void loop() throws InterruptedException, GarfoEmUsoException {
+        if (!isGarfoDireitoEmUso()) {
+            try {
+                pegaGarfoDireito();
+                if (!isGarfoEsquerdoEmUso()) {
+                    try {
+                        pegaGarfoEsquerdo();
+                        comer(1);
+                    } catch (GarfoEmUsoException e) {}
+                    largaGarfoEsquerdo();
+                }
+            } catch (GarfoEmUsoException e) {}
+            largaGarfoDireito();
+        }
+        espera(0.1);
+    }
     
     /**
      * Aguarda N segundos
