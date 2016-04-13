@@ -19,18 +19,18 @@ import javax.swing.JTextField;
 
 /**
  * Panel da simulação do barbeiro
- * 
+ *
  * @author Cristian Dias, Gustavo Cassel e Nícolas Pohren
  */
 public class PanelSimulacaoBarbeiro extends PanelSimulacao<SimulacaoBarbeiro> {
 
     /** Parâmetros */
     private PanelParametros parametros;
-    
+
     public PanelSimulacaoBarbeiro() {
         super(new SimulacaoBarbeiro());
     }
-    
+
     @Override
     public JComponent getPainelPrincipal() {
         return new PanelSimulacao();
@@ -48,7 +48,7 @@ public class PanelSimulacaoBarbeiro extends PanelSimulacao<SimulacaoBarbeiro> {
     public JComponent getPainelEstatisticas() {
         return new JPanel();
     }
-    
+
     /**
      * Panel da simulação
      */
@@ -67,8 +67,8 @@ public class PanelSimulacaoBarbeiro extends PanelSimulacao<SimulacaoBarbeiro> {
 
         /**
          * Desenha a fila de clientes
-         * 
-         * @param g2d 
+         *
+         * @param g2d
          */
         private void paintFilaClientes(Graphics2D g2d, int size) {
             int margem = 5;
@@ -80,13 +80,16 @@ public class PanelSimulacaoBarbeiro extends PanelSimulacao<SimulacaoBarbeiro> {
                 paintClienteFila(g2d, i, size, x);
             }
         }
-        
+
         /**
          * Desenha o barbeiro
-         * 
-         * @param g2d 
+         *
+         * @param g2d
          */
         public void paintBarbeiro(Graphics2D g2d, int size) {
+            if (getSimulacao() == null || getSimulacao().getBarbeiro() == null) {
+                return;
+            }
             int x = getWidth() / 2 - size / 2;
             if (getSimulacao().getBarbeiro().isDormindo()) {
                 g2d.setColor(Color.LIGHT_GRAY);
@@ -97,11 +100,14 @@ public class PanelSimulacaoBarbeiro extends PanelSimulacao<SimulacaoBarbeiro> {
             g2d.setColor(Color.BLACK);
             g2d.drawRect(x, 150, size, (int) (size * 1.5));
         }
-        
+
         /**
          * Desenha o cliente
          */
         private void paintClienteFila(Graphics2D g2d, int i, int size, int x) {
+           if (getSimulacao() == null || getSimulacao().getFilaClientes() == null) {
+               return;
+           }
            if (i < getSimulacao().getFilaClientes().size()) {
                g2d.setColor(new Color(0x3355FF));
            } else {
@@ -111,9 +117,9 @@ public class PanelSimulacaoBarbeiro extends PanelSimulacao<SimulacaoBarbeiro> {
            g2d.setColor(Color.BLACK);
            g2d.drawRect(x, 50, size, (int) (size * 1.5));
         }
-        
+
     }
-    
+
     /**
      * Panel de parâmetros
      */
@@ -125,7 +131,7 @@ public class PanelSimulacaoBarbeiro extends PanelSimulacao<SimulacaoBarbeiro> {
         private JTextField fTaxaEntradaClientes;
         /** Tempo para cortar o cabelo de um cliente */
         private JTextField fTempoCorteCabelo;
-        
+
         /**
          * Cria um novo panel de parâmetros
          */
@@ -143,10 +149,10 @@ public class PanelSimulacaoBarbeiro extends PanelSimulacao<SimulacaoBarbeiro> {
             add(internal);
             add(Box.createVerticalGlue());
         }
-        
+
         /**
          * Cria o campo de tamanho da sala de espera
-         * 
+         *
          * @return JComponent
          */
         private JComponent buildFieldTamanhoSalaEspera() {
@@ -161,14 +167,14 @@ public class PanelSimulacaoBarbeiro extends PanelSimulacao<SimulacaoBarbeiro> {
                         fTamanhoSalaEspera.setText(String.valueOf(getSimulacao().getTamanhoSalaEspera()));
                     }
                 }
-                
+
             });
             return fTamanhoSalaEspera;
         }
-        
+
         /**
          * Cria o campo de taxa de entrada de clientes
-         * 
+         *
          * @return JComponent
          */
         private JComponent buildFieldTaxaEntradaClientes() {
@@ -183,14 +189,14 @@ public class PanelSimulacaoBarbeiro extends PanelSimulacao<SimulacaoBarbeiro> {
                         fTaxaEntradaClientes.setText(String.valueOf(getSimulacao().getIndiceNovosCliente()));
                     }
                 }
-                
+
             });
             return fTaxaEntradaClientes;
         }
-        
+
         /**
          * Cria o campo de tempo do corte
-         * 
+         *
          * @return JComponent
          */
         private JComponent buildFieldTempoCorteCabelo() {
@@ -205,7 +211,7 @@ public class PanelSimulacaoBarbeiro extends PanelSimulacao<SimulacaoBarbeiro> {
                         fTempoCorteCabelo.setText(String.valueOf(getSimulacao().getTempoEsperaAtendimento()));
                     }
                 }
-                
+
             });
             return fTempoCorteCabelo;
         }
@@ -217,8 +223,8 @@ public class PanelSimulacaoBarbeiro extends PanelSimulacao<SimulacaoBarbeiro> {
             fTaxaEntradaClientes.setEnabled(enabled);
             fTempoCorteCabelo.setEnabled(enabled);
         }
-        
+
     }
 
-    
+
 }
