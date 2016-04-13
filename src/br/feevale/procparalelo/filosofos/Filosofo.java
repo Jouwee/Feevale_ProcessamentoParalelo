@@ -104,7 +104,7 @@ public class Filosofo {
      */
     public void espera(double segundos) throws InterruptedException {
         log("Aguardando %1$s segundos", segundos);
-        Thread.sleep((long) (segundos * 1000));
+        Thread.sleep((long) (Math.max(segundos, 0) * 1000));
     }
     
     /**
