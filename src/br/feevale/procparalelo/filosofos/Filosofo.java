@@ -93,7 +93,7 @@ public class Filosofo {
             } catch (GarfoEmUsoException e) {}
             largaGarfoDireito();
         }
-        espera(0.1);
+        espera(getStarvation() / 100);
     }
     
     /**
